@@ -1,0 +1,113 @@
+
+
+1. Contare quanti iscritti ci sono stati ogni anno
+
+SELECT COUNT(`enrolment_date`) AS `numero_iscritti`, YEAR(`enrolment_date`) AS `anno`
+FROM `students`
+GROUP BY YEAR(`enrolment_date`);
+
+
+2. Contare gli insegnanti che hanno l'ufficio nello stesso edificio
+
+SELECT COUNT(`office_number`) AS `teachers_number`, `office_number`
+FROM `teachers`
+GROUP BY `office_number`
+HAVING COUNT(`office_number`) > 1;
+
+
+3. Calcolare la media dei voti di ogni appello d'esame
+
+SELECT AVG(`exam_student`.`vote`), `exams`.`date` AS `exam_date`
+FROM `exam_student`
+INNER JOIN `exams`
+ON `exam_student`.`exam_id` = `exams`.`id`
+GROUP BY `exams`.`date`;
+
+4. Contare quanti corsi di laurea ci sono per ogni dipartimento
+
+SELECT COUNT(`degrees`.`id`) AS `degree_courses_number`, `departments`.`name` AS `departments_name`
+FROM `degrees`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+GROUP BY `departments`.`name`;
+
+5. Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+
+SELECT *
+FROM `students`
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+WHERE `degrees`.`name` = 'Corso di Laurea in Economia';
+
+6. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+
+SELECT *
+FROM `degrees`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+WHERE `level` = 'magistrale' && `departments`.`name` = 'Dipartimento di Neuroscienze';
+
+7. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+
+SELECT `courses`.`name` AS `course_name`, `teachers`.`name` AS `teacher_name`, `teachers`.`surname` AS `teacher_surname`, `teachers`.`id` AS `teacher_id`
+FROM `courses`
+INNER JOIN `course_teacher`
+ON `courses`.`id` = `course_teacher`.`course_id`
+INNER JOIN `teachers`
+ON `course_teacher`.`teacher_id` = `teachers`.`id`
+WHERE `teachers`.`id` = 44;
+
+8. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
+
+SELECT `students`.`surname`, `students`.`name`, `degrees`.`name` AS `degree_course_name`, `departments`.`name` AS `department_name`
+FROM students
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+ORDER BY `students`.`surname` ASC;
+
+9. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti.
+
+
+SELECT `degrees`.`name` AS `degree_name`, `courses`.`name` AS `course_name`, `teachers`.`name` AS `teacher_name`, `teachers`.`surname` AS `teacher_surname`
+FROM `degrees`
+INNER JOIN `courses`
+ON `degrees`.`id` = `courses`.`degree_id`
+INNER JOIN `course_teacher`
+ON `courses`.`id` = `course_teacher`.`course_id`
+INNER JOIN `teachers`
+ON `course_teacher`.`teacher_id` = `teachers`.`id`
+ORDER BY `degrees`.`name` ASC;
+ 
+10. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+
+SELECT DISTINCT `teachers`.`surname` AS `teacher_surname`, `teachers`.`name` AS `teacher_name`, `departments`.`name`
+FROM `teachers`
+INNER JOIN `course_teacher`
+ON `teachers`.`id` = `course_teacher`.`teacher_id`
+INNER JOIN `courses`
+ON `course_teacher`.`course_id` = `courses`.`id`
+INNER JOIN `degrees`
+ON `courses`.`degree_id` = `degrees`.`id`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+WHERE `departments`.`name` = 'Dipartimento di Matematica'
+ORDER BY `teachers`.`surname` ASC;
+
+
+SELECT teachers.name AS nome_docente, teachers.surname AS cognome_docente, departments.name AS dipartimento
+FROM teachers
+INNER JOIN course_teacher
+ON teachers.id = course_teacher.course_id
+INNER JOIN courses
+ON course_teacher.course_id = courses.id
+INNER JOIN degrees
+ON courses.id = degrees.id
+INNER JOIN departments
+ON degrees.id = departments.id
+WHERE `departments`.`name` = 'Dipartimento di Matematica'
+ORDER BY `teachers`.`surname` ASC;
+
+11. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per
+superare ciascuno dei suoi esam

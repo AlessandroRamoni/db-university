@@ -1,0 +1,31 @@
+CARS (auto usate in vendita presso una concessionaria)
+
+id - BIGINT PRIMARY KEY AUTOINCREMENT (NOT NULL UNIQUE)
+marca - VARCHAR(20) NOT NULL
+modello - VARCHAR(30) NOT NULL
+cilindrata - DECIMAL(9,4) -> XXXXX,XXXX
+anno - YEAR - NOT NULL
+alimentazione - VARCHAR(20) NOT NULL
+km - DECIMAL(8,2) NULL
+n_porte - TINYINT NULL
+tipo - VARCHAR(20) NOT NULL
+colore - VARCHAR(15) NULL
+targa - VARCHAR(7) NOT NULL UNIQUE
+cambio - VARCHAR(20) NULL
+prezzo - INT NOT NULL
+n_posti - TINYINT NULL
+emissioni - VARCHAR(20) NULL
+unico_proprietario - TINYINT NULL DEFAULT=0
+revisionata - TINYINT NOT NULL 
+incidentata - TINYINT NOT NULL
+data_arrivo_concessionaria - DATE NOT NULL
+foto - TEXT NULL (url) oppure BLOB
+vin (num di telaio) - VARCHAR(17) NULL UNIQUE
+cavalli - VARCHAR(4) NULL
+
+
+
+// queste potrebbero essere informazioni presenti in altre tabelle
+posizione - TEXT NOT NULL
+ultimo_proprietario - TEXT NOT NULL
+
