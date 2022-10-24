@@ -86,13 +86,10 @@ if ($result1 && $result1->num_rows > 0) {
 } else {
     echo "query error";
 }
+
+
+$conn->close();
 ?>
-
-
-
-
-
-
 
 </body>
 </html>
